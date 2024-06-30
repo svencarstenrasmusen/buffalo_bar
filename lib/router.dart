@@ -1,4 +1,5 @@
 import 'package:buffalo_bar/data/providers/user_provider.dart';
+import 'package:buffalo_bar/screens/loginScreen.dart';
 import 'package:buffalo_bar/screens/splashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -17,5 +18,5 @@ final GoRouter router = GoRouter(routes: <RouteBase>[
         }
       }),
   GoRoute(path: '/home', builder: (context, state) => const Placeholder()),
-  GoRoute(path: '/login', builder: (context, state) => const Placeholder())
+  GoRoute(path: '/login', builder: (context, state) => const LoginScreen())
 ]);
