@@ -7,6 +7,7 @@ class UserProvider with ChangeNotifier {
 
   User? get user => _user;
   bool get isLoading => _isLoading;
+  bool get isLoggedIn => _user != null;
 
   void setLoading(bool value) {
     _isLoading = value;
