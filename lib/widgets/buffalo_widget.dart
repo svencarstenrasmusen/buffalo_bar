@@ -6,10 +6,15 @@ class BuffaloWidget extends StatelessWidget {
   /// The Buffalo widget will take the maximum amount of space available to it.
   /// The [icon] parameter allows for a custom Icon to be added.
 
-  const BuffaloWidget({super.key, Icon? icon})
-      : icon = icon ?? const Icon(Icons.question_mark);
+  const BuffaloWidget(
+      {super.key, Icon? icon, Color? outerColor, Color? innerColor})
+      : icon = icon ?? const Icon(Icons.question_mark),
+        outerColor = outerColor ?? buffaloDarkRed,
+        innerColor = innerColor ?? buffaloOrange;
 
-  final Icon? icon;
+  final Icon icon;
+  final Color outerColor;
+  final Color innerColor;
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +23,10 @@ class BuffaloWidget extends StatelessWidget {
       double innerRadius = maxRadius * 0.8;
       return CircleAvatar(
         radius: maxRadius,
-        backgroundColor: buffaloRed,
+        backgroundColor: outerColor,
         child: CircleAvatar(
           radius: innerRadius,
-          backgroundColor: buffaloOrange,
+          backgroundColor: innerColor,
           child: icon,
         ),
       );
