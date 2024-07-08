@@ -14,14 +14,23 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-        backgroundColor: buffaloYellow,
-        body: Column(
+      backgroundColor: buffaloYellow,
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const BuffaloWidget(),
+            ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: screenHeight / 2),
+                child: const BuffaloWidget()),
             BuffaloButton(text: 'Login', onTap: _login)
           ],
-        ));
+        ),
+      ),
+    );
   }
 
   void _login() {
