@@ -1,3 +1,4 @@
+import 'package:buffalo_bar/data/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:buffalo_bar/data/models/user.dart';
 
@@ -22,6 +23,18 @@ class UserProvider with ChangeNotifier {
   void unsetUser() {
     _user = null;
     notifyListeners();
+  }
+
+  Future<void> loginAndSetUser(UserService service) async {
+    setLoading(true);
+    try {
+      User user = await service.login();
+      setUser(user);
+    } catch (e) {
+      rethrow;
+    } finally {
+      setLoading(false);
+    }
   }
 
   @override
