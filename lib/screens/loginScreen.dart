@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onTap: () {
                         userProvider.loginAndSetUser(userService).then((_) {
                           if (userProvider.isLoggedIn) {
-                            context.go('/dashboard');
+                            context.go('/main');
                           }
                         });
                       })

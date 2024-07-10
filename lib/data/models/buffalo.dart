@@ -17,4 +17,9 @@ class Buffalo {
         snaggee: json['snaggee'],
         dateTime: DateTime.parse(json['dateTime']));
   }
+
+  @override
+  String toString() {
+    return 'Buffalo ID: $id, Scalper: $scalper, Snaggee: $snaggee';
+  }
 }

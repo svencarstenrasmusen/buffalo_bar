@@ -4,8 +4,8 @@ class JSONBuffaloParser {
   Buffalo parseBuffalo(Map json) {
     return Buffalo(
         id: json['id'],
-        scalper: json['buffaloee'],
-        snaggee: json['buffaloer'],
+        scalper: json['scalper'],
+        snaggee: json['snaggee'],
         dateTime: DateTime.parse(json['dateTime']));
   }
 
