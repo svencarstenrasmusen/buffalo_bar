@@ -16,7 +16,8 @@ class ScalpTile extends StatelessWidget {
             blurRadius: Constants.blurRadius,
             offset: Constants.blurOffset)
       ]),
-      child: Placeholder(child: Text(scalp.toString())),
+      child: Placeholder(
+          child: Text('${scalp.toString()} ${scalp.getDateTimeString()}')),
     );
   }
 }

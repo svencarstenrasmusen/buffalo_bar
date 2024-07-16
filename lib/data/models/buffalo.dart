@@ -18,6 +18,26 @@ class Buffalo {
         dateTime: DateTime.parse(json['dateTime']));
   }
 
+  String getDateTimeString() {
+    return '${getDateString()} at ${getTimeString()}';
+  }
+
+  String getDateString() {
+    String year = dateTime.year.toString();
+    String month = dateTime.month.toString();
+    String day = dateTime.day.toString();
+
+    return '$day.$month.$year';
+  }
+
+  String getTimeString() {
+    String hour = dateTime.hour.toString();
+    String minute = dateTime.minute.toString();
+    String second = dateTime.second.toString();
+
+    return '$hour:$minute:$second';
+  }
+
   @override
   String toString() {
     return 'Buffalo ID: $id, Scalper: $scalper, Snaggee: $snaggee';
