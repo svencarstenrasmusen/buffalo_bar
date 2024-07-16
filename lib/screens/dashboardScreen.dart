@@ -4,6 +4,8 @@ import 'package:buffalo_bar/utils/colours.dart';
 import 'package:buffalo_bar/widgets/scalp_tile.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/dialogs/not_implement.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -25,7 +27,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: buffaloYellow,
-        body: Flexible(child: _buffaloListing()));
+        body: Flexible(child: _buffaloListing()),
+        floatingActionButton: _addScalpButton());
   }
 
   FutureBuilder _buffaloListing() {
@@ -46,5 +49,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
           }
           return const CircularProgressIndicator();
         });
+  }
+
+  FloatingActionButton _addScalpButton() {
+    return FloatingActionButton(
+      onPressed: () => showDialog(
+          context: context, builder: (context) => const NotImplementDialog()),
+      child: const Icon(Icons.add),
+    );
   }
 }
