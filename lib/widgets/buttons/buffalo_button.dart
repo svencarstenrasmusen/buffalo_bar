@@ -1,4 +1,3 @@
-import 'package:buffalo_bar/utils/colours.dart';
 import 'package:flutter/material.dart';
 
 class BuffaloButton extends StatelessWidget {
