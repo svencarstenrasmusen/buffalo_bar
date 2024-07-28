@@ -39,8 +39,12 @@ class _GroupsScreensState extends State<GroupsScreens> {
             itemCount: snapshot.data?.length,
             itemBuilder: (context, index) {
               return Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: GroupTile(group: snapshot.data![index]));
+                padding: const EdgeInsets.all(5),
+                child: GroupTile(
+                  group: snapshot.data![index],
+                  onTap: () => printTap(id: snapshot.data![index].id),
+                ),
+              );
             },
           );
         } else if (snapshot.hasError) {
@@ -50,5 +54,9 @@ class _GroupsScreensState extends State<GroupsScreens> {
         }
       },
     );
+  }
+
+  void printTap({required String id}) {
+    print('tapped $id');
   }
 }

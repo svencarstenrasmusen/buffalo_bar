@@ -1,12 +1,12 @@
 [
   {
-    "id": "group-01",
+    "id": "group-01.json",
     "name": "LSS",
     "createdAt": "1720476510",
     "numMembers": 16
   },
   {
-    "id": "group-02",
+    "id": "group-02.json",
     "name": "X-Diving",
     "createdAt": "1720476520",
     "numMembers": 5

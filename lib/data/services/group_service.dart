@@ -19,4 +19,15 @@ class GroupService {
       rethrow;
     }
   }
+
+  Future<Group> getGroupById({required String id}) async {
+    String path = '$_baseApi/$id';
+    try {
+      final response = await rootBundle.loadString(path);
+      var data = jsonDecode(response);
+      return _parser.parseGroup(data);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

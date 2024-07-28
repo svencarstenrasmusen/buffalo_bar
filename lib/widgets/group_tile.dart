@@ -3,9 +3,10 @@ import 'package:buffalo_bar/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class GroupTile extends StatelessWidget {
-  const GroupTile({super.key, required this.group});
+  const GroupTile({super.key, required this.group, required this.onTap});
 
   final Group group;
+  final Function onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,9 @@ class GroupTile extends StatelessWidget {
             blurRadius: Constants.blurRadius,
             offset: Constants.blurOffset)
       ]),
-      child: Placeholder(child: Text(group.toString())),
+      child: GestureDetector(
+          onTap: () => onTap(),
+          child: Placeholder(child: Text(group.toString()))),
     );
   }
 }
