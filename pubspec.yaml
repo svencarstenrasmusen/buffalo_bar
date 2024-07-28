@@ -29,3 +29,6 @@ flutter:
     - assets/mock_data/scalps.json
     - assets/mock_data/user-02.json
     - assets/mock_data/user-03.json
+    - assets/mock_data/group-01.json
+    - assets/mock_data/group-02.json
+    - assets/mock_data/groups.json

@@ -1,4 +1,5 @@
 import 'package:buffalo_bar/screens/dashboardScreen.dart';
+import 'package:buffalo_bar/screens/groupsScreens.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/colours.dart';
@@ -35,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget _selectedPage() {
     return [
       const DashboardScreen(),
-      const Placeholder(),
+      const GroupsScreens(),
       const Placeholder()
     ][_currentPageIndex];
   }

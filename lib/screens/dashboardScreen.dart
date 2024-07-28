@@ -27,7 +27,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: buffaloYellow,
-        body: Flexible(child: _buffaloListing()),
+        body: _buffaloListing(),
         floatingActionButton: _addScalpButton());
   }
 
