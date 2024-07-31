@@ -32,3 +32,4 @@ flutter:
     - assets/mock_data/group-01.json
     - assets/mock_data/group-02.json
     - assets/mock_data/groups.json
+    - assets/mock_data/groupUsers.json

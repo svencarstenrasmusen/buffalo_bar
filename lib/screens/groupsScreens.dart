@@ -1,8 +1,11 @@
 import 'package:buffalo_bar/data/models/group.dart';
+import 'package:buffalo_bar/data/models/user.dart';
 import 'package:buffalo_bar/data/services/group_service.dart';
+import 'package:buffalo_bar/data/services/user_service.dart';
 import 'package:buffalo_bar/utils/colours.dart';
 import 'package:buffalo_bar/widgets/group_tile.dart';
 import 'package:buffalo_bar/widgets/loadingIndicatorWithText.dart';
+import 'package:buffalo_bar/widgets/user_tile.dart';
 import 'package:flutter/material.dart';
 
 class GroupsScreens extends StatefulWidget {
@@ -13,20 +16,85 @@ class GroupsScreens extends StatefulWidget {
 }
 
 class _GroupsScreensState extends State<GroupsScreens> {
+  //Services
   final GroupService groupService = GroupService();
+  final UserService _userService = UserService();
+
+  //Page variables
   late Future<List<Group>> groups;
+  Group? _selectedGroup;
 
   @override
   void initState() {
     super.initState();
     groups = groupService.getAllJoinedGroups();
+    _selectedGroup = null;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: buffaloYellow,
-      body: _groupsListing(),
+      body: _selectedGroup != null ? _displaySelectedGroup() : _groupsListing(),
+    );
+  }
+
+  Widget _displaySelectedGroup() {
+    return Column(children: [
+      Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: _groupDetailHeading(name: _selectedGroup!.name),
+      ),
+      Flexible(
+          child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: _userListing(),
+      )),
+      Text(_selectedGroup.toString())
+    ]);
+  }
+
+  FutureBuilder _userListing() {
+    return FutureBuilder<List<User>>(
+        future: _userService.mockGetAllGroupUsers(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return _listing(users: snapshot.data!);
+          } else if (snapshot.hasError) {
+            return Center(child: Text(snapshot.error!.toString()));
+          } else {
+            return const LoadingIndicatorWithText(text: 'Loading Users...');
+          }
+        });
+  }
+
+  ListView _listing({required List<User> users}) {
+    return ListView.builder(
+      itemCount: users.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: UserTile(user: users[index]),
+        );
+      },
+    );
+  }
+
+  Widget _groupDetailHeading({required String name}) {
+    return Row(
+      children: [
+        const Flexible(child: Divider(color: Colors.black)),
+        CircleAvatar(
+          radius: 50,
+          backgroundColor: Colors.black,
+          child: CircleAvatar(
+            radius: 49,
+            backgroundColor: buffaloYellow,
+            child: Text(name, style: const TextStyle(color: Colors.white)),
+          ),
+        ),
+        const Flexible(child: Divider(color: Colors.black))
+      ],
     );
   }
 
@@ -42,7 +110,7 @@ class _GroupsScreensState extends State<GroupsScreens> {
                 padding: const EdgeInsets.all(5),
                 child: GroupTile(
                   group: snapshot.data![index],
-                  onTap: () => printTap(id: snapshot.data![index].id),
+                  onTap: () => printTap(group: snapshot.data![index]),
                 ),
               );
             },
@@ -56,7 +124,9 @@ class _GroupsScreensState extends State<GroupsScreens> {
     );
   }
 
-  void printTap({required String id}) {
-    print('tapped $id');
+  void printTap({required Group group}) {
+    setState(() {
+      _selectedGroup = group;
+    });
   }
 }

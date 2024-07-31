@@ -19,4 +19,15 @@ class UserService {
       rethrow;
     }
   }
+
+  Future<List<User>> mockGetAllGroupUsers() async {
+    String path = '$_baseApi/groupUsers.json';
+    try {
+      final response = await rootBundle.loadString(path);
+      var data = jsonDecode(response);
+      return _parser.parseListOfUsers(data);
+    } catch (e) {
+      throw Exception('Unexpected Error: ${e.toString()}');
+    }
+  }
 }

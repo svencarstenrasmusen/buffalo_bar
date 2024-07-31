@@ -1,0 +1,18 @@
+[{
+  "id": "1",
+  "username": "SventheEagle",
+  "email": "sventheeagle@email.com",
+  "createdAt": "1720476494"
+},
+  {
+    "id": "user-02",
+    "username": "JohnDoe",
+    "email": "johndoe@email.com",
+    "createdAt": "1720476510"
+  },{
+  "id": "user-03",
+  "username": "JaneDoe",
+  "email": "janedoe@email.com",
+  "createdAt": "1720476520"
+}
+]

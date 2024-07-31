@@ -21,4 +21,9 @@ class User {
   Map<String, dynamic> toJson() {
     return {'id': id, 'username': username, 'email': email};
   }
+
+  @override
+  String toString() {
+    return '$username, $email';
+  }
 }
