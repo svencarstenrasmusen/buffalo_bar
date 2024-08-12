@@ -14,6 +14,9 @@ dependencies:
   provider: ^6.1.2
   go_router: ^14.2.0
   http: ^1.2.1
+  url_launcher: ^6.2.4
+  nonce: ^1.2.0
+  dio: ^5.4.0
 
 dev_dependencies:
   flutter_test:

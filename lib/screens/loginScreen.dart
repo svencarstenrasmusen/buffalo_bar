@@ -1,4 +1,5 @@
 import 'package:buffalo_bar/data/providers/user_provider.dart';
+import 'package:buffalo_bar/data/services/oidc_service.dart';
 import 'package:buffalo_bar/data/services/user_service.dart';
 import 'package:buffalo_bar/utils/colours.dart';
 import 'package:buffalo_bar/widgets/buffalo_widget.dart';
@@ -17,6 +18,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final UserService userService = UserService();
+  final OidcService oidcService = OidcService();
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +40,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   BuffaloButton(
                       text: 'Login',
                       onTap: () {
-                        userProvider.loginAndSetUser(userService).then((_) {
+                        oidcService.redirectToOidc(null);
+                        /**userProvider.loginAndSetUser(userService).then((_) {
                           if (userProvider.isLoggedIn) {
                             context.go('/main');
                           }
-                        });
+                        });*/
                       })
                 ],
               ),
