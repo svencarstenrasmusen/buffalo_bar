@@ -1,5 +1,7 @@
 import 'package:buffalo_bar/data/models/buffalo.dart';
+import 'package:buffalo_bar/data/models/user.dart';
 import 'package:buffalo_bar/data/services/buffalo_service.dart';
+import 'package:buffalo_bar/data/services/user_service.dart';
 import 'package:buffalo_bar/utils/colours.dart';
 import 'package:buffalo_bar/widgets/scalp_tile.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final BuffaloService buffaloService = BuffaloService();
+  final UserService userService = UserService();
   late Future<List<Buffalo>> buffaloes;
 
   @override
@@ -53,9 +56,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   FloatingActionButton _addScalpButton() {
     return FloatingActionButton(
-      onPressed: () => showDialog(
-          context: context, builder: (context) => const NotImplementDialog()),
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('test'),
+                content:
+                    SizedBox(height: 500, width: 500, child: _getAllPlayers()),
+              );
+            });
+      },
       child: const Icon(Icons.add),
     );
+  }
+
+  FutureBuilder _getAllPlayers() {
+    return FutureBuilder<List<User>>(
+        future: userService.getAllUsers(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Text(index.toString());
+              },
+            );
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error!.toString()}');
+          }
+          return const CircularProgressIndicator();
+        });
   }
 }
