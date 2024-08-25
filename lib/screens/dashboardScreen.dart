@@ -39,19 +39,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
         future: buffaloes,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
-                itemCount: snapshot.data?.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: ScalpTile(scalp: snapshot.data![index]),
-                  );
-                });
+            if (snapshot.data!.isEmpty) {
+              return noBuffaloesText();
+            } else {
+              return ListView.builder(
+                  itemCount: snapshot.data?.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: ScalpTile(scalp: snapshot.data![index]),
+                    );
+                  });
+            }
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error!}'));
           }
           return const CircularProgressIndicator();
         });
+  }
+
+  Center noBuffaloesText() {
+    return const Center(
+      child: Text('There seem to be no buffaloes... GO GET THEM!'),
+    );
   }
 
   FloatingActionButton _addScalpButton() {

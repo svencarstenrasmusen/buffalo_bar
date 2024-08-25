@@ -34,8 +34,27 @@ class _GroupsScreensState extends State<GroupsScreens> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: buffaloYellow,
-      body: _selectedGroup != null ? _displaySelectedGroup() : _groupsListing(),
+        backgroundColor: buffaloYellow,
+        //body: _selectedGroup != null ? _displaySelectedGroup() : _groupsListing(),
+        body: _displayTooLazyText());
+  }
+
+  Widget _displayTooLazyText() {
+    return const Column(
+      children: [
+        Flexible(
+          child: Center(
+              child: Text(
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                  "The first season of Buffalo is a wild west! Go all out! No groups! You are live to everyone!!!")),
+        ),
+        Spacer(),
+        Center(
+            child: Text(
+                "My dude... chill! I've got a life. Groups will be there soon.")),
+        SizedBox(height: 20)
+      ],
     );
   }
 
