@@ -61,7 +61,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: const Text('test'),
+                title: const Text('Buffalo!!!'),
                 content:
                     SizedBox(height: 500, width: 500, child: _getAllPlayers()),
               );
@@ -80,7 +80,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               itemCount: snapshot.data!.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return Text(index.toString());
+                return ListTile(
+                  title: Text(snapshot.data![index].username),
+                  leading: const Icon(Icons.person),
+                  onTap: () {
+                    _buffalo(scalper: 'example', snaggee: 'example2');
+                  },
+                );
               },
             );
           } else if (snapshot.hasError) {
@@ -88,5 +94,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           }
           return const CircularProgressIndicator();
         });
+  }
+
+  void _buffalo({required String scalper, snaggee}) {
+    print('$scalper is buffaloing $snaggee');
   }
 }
