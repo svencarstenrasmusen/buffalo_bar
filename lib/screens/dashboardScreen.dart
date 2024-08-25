@@ -1,12 +1,12 @@
 import 'package:buffalo_bar/data/models/buffalo.dart';
 import 'package:buffalo_bar/data/models/user.dart';
+import 'package:buffalo_bar/data/providers/user_provider.dart';
 import 'package:buffalo_bar/data/services/buffalo_service.dart';
 import 'package:buffalo_bar/data/services/user_service.dart';
 import 'package:buffalo_bar/utils/colours.dart';
 import 'package:buffalo_bar/widgets/scalp_tile.dart';
 import 'package:flutter/material.dart';
-
-import '../widgets/dialogs/not_implement.dart';
+import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -84,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   title: Text(snapshot.data![index].username),
                   leading: const Icon(Icons.person),
                   onTap: () {
-                    _buffalo(scalper: 'example', snaggee: 'example2');
+                    _buffalo(snaggee: snapshot.data![index]);
                   },
                 );
               },
@@ -96,7 +96,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         });
   }
 
-  void _buffalo({required String scalper, snaggee}) {
-    print('$scalper is buffaloing $snaggee');
+  void _buffalo({required User snaggee}) {
+    User? user = Provider.of<UserProvider>(context, listen: false).user;
+    print('${user?.username} is buffaloing ${snaggee.username}');
   }
 }

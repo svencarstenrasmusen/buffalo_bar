@@ -16,7 +16,7 @@ class _SplashscreenState extends State<Splashscreen> {
       backgroundColor: buffaloYellow,
       body: Center(
         child: Expanded(
-          child: LoadingIndicatorWithText(text: 'Loading Buffalo'),
+          child: LoadingIndicatorWithText(text: 'Loading Buffalo...'),
         ),
       ),
     );

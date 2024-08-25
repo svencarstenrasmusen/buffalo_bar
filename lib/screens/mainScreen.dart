@@ -1,5 +1,6 @@
 import 'package:buffalo_bar/screens/dashboardScreen.dart';
 import 'package:buffalo_bar/screens/groupsScreens.dart';
+import 'package:buffalo_bar/screens/profileScreen.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/colours.dart';
@@ -37,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
     return [
       const DashboardScreen(),
       const GroupsScreens(),
-      const Placeholder()
+      const ProfileScreen()
     ][_currentPageIndex];
   }
 

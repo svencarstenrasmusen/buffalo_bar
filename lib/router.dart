@@ -29,6 +29,16 @@ final GoRouter router = GoRouter(routes: <RouteBase>[
         String? state = uri.queryParameters['state'];
         return OidcScreen(code: code, error: error, state: state);
       }),
-  GoRoute(path: '/main', builder: (context, state) => const MainScreen()),
+  GoRoute(
+      path: '/main',
+      builder: (context, state) => const MainScreen(),
+      redirect: (context, state) {
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        if (userProvider.isLoggedIn) {
+          return '/main';
+        } else {
+          return '/login';
+        }
+      }),
   GoRoute(path: '/login', builder: (context, state) => const LoginScreen())
 ]);

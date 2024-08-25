@@ -1,6 +1,9 @@
+import 'package:buffalo_bar/data/models/user.dart';
+import 'package:buffalo_bar/data/providers/user_provider.dart';
 import 'package:buffalo_bar/data/services/oidc_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class OidcScreen extends StatefulWidget {
   final String? code;
@@ -43,13 +46,16 @@ class _OidcScreenState extends State<OidcScreen> {
   }
 
   void _getUserIdentity(String? code) async {
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
     if (code == null || code.isEmpty) {
       _setOidcResponse('Missing authorization code in url.');
     } else {
       _setLoading(true);
       _setOidcResponse('Getting user identity...');
       try {
-        await _oidcService.authenticateWithAuthCode(code);
+        User user = await _oidcService.authenticateWithAuthCode(code);
+        userProvider.setUser(user);
         _setLoading(false);
         if (widget.state != null) _handleState(state: widget.state!);
         // ignore: use_build_context_synchronously

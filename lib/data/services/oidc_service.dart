@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:buffalo_bar/config.dart';
+import 'package:buffalo_bar/data/models/user.dart';
+import 'package:buffalo_bar/data/parsers/user_parser.dart';
 import 'package:buffalo_bar/exceptions/ServerOfflineException.dart';
 import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
@@ -9,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class OidcService {
   final Dio dio = Dio();
+  final JSONUserParser userParser = JSONUserParser();
 
   static const String redirect = OIDC_REDIRECT_URL;
   String clientId = OIDC_CLIENT_ID;
@@ -41,7 +44,7 @@ class OidcService {
     await launchUrl(redirectUrl, webOnlyWindowName: '_self');
   }
 
-  Future<void> authenticateWithAuthCode(String code) async {
+  Future<User> authenticateWithAuthCode(String code) async {
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;
     dio.httpClientAdapter = adapter;
@@ -55,7 +58,7 @@ class OidcService {
       final response = await dio.post(authEndpoint, data: jsonBody);
 
       if (response.statusCode == 200) {
-        return;
+        return userParser.parseUser(response.data);
       } else if (response.statusCode! >= 400 && response.statusCode! < 500) {
         throw Exception('Error 403 Forbidden.');
       } else {

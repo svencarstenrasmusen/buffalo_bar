@@ -22,6 +22,15 @@ class User {
     return {'id': id, 'username': username, 'email': email};
   }
 
+  String getCreateDate() {
+    DateTime date = DateTime.parse(createdAt);
+    String day = date.day.toString();
+    String month = date.month.toString();
+    String year = date.year.toString();
+
+    return '$day.$month.$year';
+  }
+
   @override
   String toString() {
     return '$username, $email';
