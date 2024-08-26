@@ -1,5 +1,6 @@
 import 'package:buffalo_bar/data/models/group.dart';
 import 'package:buffalo_bar/data/models/user.dart';
+import 'package:buffalo_bar/data/providers/user_provider.dart';
 import 'package:buffalo_bar/data/services/group_service.dart';
 import 'package:buffalo_bar/data/services/user_service.dart';
 import 'package:buffalo_bar/utils/colours.dart';
@@ -7,6 +8,7 @@ import 'package:buffalo_bar/widgets/group_tile.dart';
 import 'package:buffalo_bar/widgets/loadingIndicatorWithText.dart';
 import 'package:buffalo_bar/widgets/user_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class GroupsScreens extends StatefulWidget {
   const GroupsScreens({super.key});
@@ -21,13 +23,11 @@ class _GroupsScreensState extends State<GroupsScreens> {
   final UserService _userService = UserService();
 
   //Page variables
-  late Future<List<Group>> groups;
   Group? _selectedGroup;
 
   @override
   void initState() {
     super.initState();
-    groups = groupService.getAllJoinedGroups();
     _selectedGroup = null;
   }
 
@@ -35,8 +35,10 @@ class _GroupsScreensState extends State<GroupsScreens> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: buffaloYellow,
-        //body: _selectedGroup != null ? _displaySelectedGroup() : _groupsListing(),
-        body: _displayTooLazyText());
+        body:
+            _selectedGroup != null ? _displaySelectedGroup() : _groupsListing()
+        //body: _displayTooLazyText()
+        );
   }
 
   Widget _displayTooLazyText() {
@@ -119,7 +121,8 @@ class _GroupsScreensState extends State<GroupsScreens> {
 
   FutureBuilder _groupsListing() {
     return FutureBuilder<List<Group>>(
-      future: groups,
+      future: groupService.getAllJoinedGroups(
+          id: Provider.of<UserProvider>(context, listen: false).user!.id),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
