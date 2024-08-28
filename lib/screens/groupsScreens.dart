@@ -19,7 +19,7 @@ class GroupsScreens extends StatefulWidget {
 
 class _GroupsScreensState extends State<GroupsScreens> {
   //Services
-  final GroupService groupService = GroupService();
+  final GroupService _groupService = GroupService();
   final UserService _userService = UserService();
 
   //Page variables
@@ -77,7 +77,7 @@ class _GroupsScreensState extends State<GroupsScreens> {
 
   FutureBuilder _userListing() {
     return FutureBuilder<List<User>>(
-        future: _userService.mockGetAllGroupUsers(),
+        future: _groupService.getAllPlayersFromGroupId(id: _selectedGroup!.id),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return _listing(users: snapshot.data!);
@@ -121,7 +121,7 @@ class _GroupsScreensState extends State<GroupsScreens> {
 
   FutureBuilder _groupsListing() {
     return FutureBuilder<List<Group>>(
-      future: groupService.getAllJoinedGroups(
+      future: _groupService.getAllJoinedGroups(
           id: Provider.of<UserProvider>(context, listen: false).user!.id),
       builder: (context, snapshot) {
         if (snapshot.hasData) {

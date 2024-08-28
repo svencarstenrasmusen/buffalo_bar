@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:buffalo_bar/config.dart';
 import 'package:buffalo_bar/data/models/group.dart';
+import 'package:buffalo_bar/data/models/user.dart';
 import 'package:buffalo_bar/data/parsers/group_parser.dart';
 import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
@@ -22,6 +23,21 @@ class GroupService {
     try {
       final response = await dio.get(path);
       return _parser.parseListOfGroups(response.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<User>> getAllPlayersFromGroupId({required String id}) async {
+    String path = '$API_URL/api/v1/playerPack/players/$id';
+
+    BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
+    adapter.withCredentials = true;
+    dio.httpClientAdapter = adapter;
+
+    try {
+      final response = await dio.get(path);
+      return _parser.parseLifOfPlayersFromGroup(response.data);
     } catch (e) {
       rethrow;
     }
