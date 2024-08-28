@@ -96,7 +96,12 @@ class _GroupsScreensState extends State<GroupsScreens> {
         return Padding(
           padding: const EdgeInsets.only(bottom: 5),
           child: UserTile(
-              user: users[index], joinedAt: '21.08.2024', isAdmin: true),
+              user: users[index],
+              joinedAt: '21.08.2024',
+              isAdmin: true,
+              scalps: 21,
+              snags: 17,
+              position: index + 1),
         );
       },
     );
