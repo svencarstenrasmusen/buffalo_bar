@@ -95,7 +95,8 @@ class _GroupsScreensState extends State<GroupsScreens> {
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 5),
-          child: UserTile(user: users[index]),
+          child: UserTile(
+              user: users[index], joinedAt: '21.08.2024', isAdmin: true),
         );
       },
     );

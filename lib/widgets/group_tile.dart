@@ -17,9 +17,12 @@ class GroupTile extends StatelessWidget {
             blurRadius: Constants.blurRadius,
             offset: Constants.blurOffset)
       ]),
-      child: GestureDetector(
-          onTap: () => onTap(),
-          child: Placeholder(child: Text(group.toString()))),
+      child: ListTile(
+        leading: const Icon(Icons.group),
+        title: Text(group.name),
+        onTap: () => onTap(),
+        dense: true,
+      ),
     );
   }
 }
