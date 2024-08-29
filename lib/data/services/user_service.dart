@@ -52,4 +52,31 @@ class UserService {
       rethrow;
     }
   }
+
+  Future<User> getUserByUsername({required String username}) async {
+    String path = '$API_URL/api/v1/player/username/$username';
+
+    BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
+    adapter.withCredentials = true;
+    dio.httpClientAdapter = adapter;
+
+    try {
+      final response = await dio.get(path);
+      if (response.statusCode == 200) {
+        return _parser.parseUser(response.data);
+      } else if (response.statusCode == 404) {
+        throw Exception('User not found.');
+      } else {
+        throw Exception('Unexpected error finding a player by username.');
+      }
+    } on DioException catch (e) {
+      if (e.response!.statusCode == 404) {
+        throw 'Player not found.';
+      } else {
+        rethrow;
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

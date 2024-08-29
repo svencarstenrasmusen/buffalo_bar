@@ -43,6 +43,30 @@ class GroupService {
     }
   }
 
+  Future<bool> addPlayerToGroup(
+      {required String playerId,
+      required String groupId,
+      required bool isAdmin}) async {
+    String path = '$API_URL/api/v1/playerPack';
+
+    BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
+    adapter.withCredentials = true;
+    dio.httpClientAdapter = adapter;
+
+    var body = {'playerId': playerId, 'packId': groupId, 'isAdmin': isAdmin};
+
+    try {
+      final response = await dio.post(path, data: jsonEncode(body));
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception('Unexpected error adding player to group.');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<Group> getGroupById({required String id}) async {
     String path = '$_baseApi/$id';
     try {

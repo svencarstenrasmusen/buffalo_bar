@@ -24,6 +24,7 @@ class _GroupsScreensState extends State<GroupsScreens> {
 
   //Page variables
   Group? _selectedGroup;
+  final TextEditingController _addPlayerController = TextEditingController();
 
   @override
   void initState() {
@@ -32,13 +33,132 @@ class _GroupsScreensState extends State<GroupsScreens> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: buffaloYellow,
-        body:
-            _selectedGroup != null ? _displaySelectedGroup() : _groupsListing()
-        //body: _displayTooLazyText()
-        );
+      backgroundColor: buffaloYellow,
+      body: _selectedGroup != null ? _displaySelectedGroup() : _groupsListing(),
+      floatingActionButton:
+          _selectedGroup != null ? _displayAddUserToGroupButton() : Container(),
+    );
+  }
+
+  FloatingActionButton _displayAddUserToGroupButton() {
+    return FloatingActionButton(
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('${_selectedGroup?.name} - Add Player'),
+                  content: SizedBox(
+                      width: 500,
+                      child: TextField(
+                        controller: _addPlayerController,
+                      )),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Cancel')),
+                    TextButton(
+                      onPressed: () {
+                        if (_addPlayerController.text.isNotEmpty) {
+                          Navigator.of(context).pop();
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return findAndAddPlayer();
+                              });
+                        }
+                      },
+                      child: const Text('Add'),
+                    )
+                  ],
+                );
+              });
+        },
+        child: const Icon(Icons.person_add));
+  }
+
+  FutureBuilder findAndAddPlayer() {
+    return FutureBuilder<User>(
+        future:
+            _userService.getUserByUsername(username: _addPlayerController.text),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return AlertDialog(
+              title: const Text("Confirm Player"),
+              content: Text(
+                  'Are you sure you want to add the player: ${snapshot.data!.username}'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('No'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _addPlayerController.clear();
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return _addPlayerToGroup(user: snapshot.data!);
+                        });
+                  },
+                  child: const Text('Yes'),
+                ),
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return AlertDialog(
+              title: const Text("Oops!"),
+              content: Text('Error: ${snapshot.error!.toString()}'),
+            );
+          }
+          return const AlertDialog(
+            title: Text("Patience my dude!"),
+            content: LoadingIndicatorWithText(text: 'Finding Player...'),
+          );
+        });
+  }
+
+  FutureBuilder _addPlayerToGroup({required User user}) {
+    return FutureBuilder<bool>(
+        future: _groupService.addPlayerToGroup(
+            playerId: user.id, groupId: _selectedGroup!.id, isAdmin: false),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return AlertDialog(
+              title: const Text('SUCCESS!'),
+              content: const Text('New player joined!'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                )
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return AlertDialog(
+              title: const Text("HEPPLA!"),
+              content: Text('Error: ${snapshot.error!.toString()}'),
+            );
+          }
+          return const AlertDialog(
+            title: Text("Soon There!"),
+            content: LoadingIndicatorWithText(text: 'Adding Player...'),
+          );
+        });
   }
 
   Widget _displayTooLazyText() {
@@ -70,8 +190,7 @@ class _GroupsScreensState extends State<GroupsScreens> {
           child: Padding(
         padding: const EdgeInsets.all(5.0),
         child: _userListing(),
-      )),
-      Text(_selectedGroup.toString())
+      ))
     ]);
   }
 
