@@ -6,6 +6,14 @@ class JSONGroupParser {
     return Group.fromJson(json);
   }
 
+  Group parseCreatedGroup(Map<String, dynamic> json) {
+    return Group(
+        id: json['id'],
+        name: json['name'],
+        createdAt: json['createdAt'],
+        numMembers: json['numMembers']);
+  }
+
   List<Group> parseListOfGroups(List jsonList) {
     return jsonList.map((json) => parseGroup(json)).toList();
   }

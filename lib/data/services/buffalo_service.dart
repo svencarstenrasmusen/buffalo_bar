@@ -28,4 +28,37 @@ class BuffaloService {
       rethrow;
     }
   }
+
+  Future<bool> buffalo(
+      {required String scalperId, required String snaggeeId}) async {
+    String path = '$API_URL/api/v1/buffalo/add';
+
+    BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
+    adapter.withCredentials = true;
+    dio.httpClientAdapter = adapter;
+
+    var body = {
+      'scalperId': scalperId,
+      'snaggeeId': snaggeeId,
+      'latitude': 0,
+      'longitude': 0
+    };
+
+    try {
+      final response = await dio.post(path, data: jsonEncode(body));
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception('Unexpected error getting ALL buffaloes.');
+      }
+    } on DioException catch (e) {
+      if (e.response!.statusCode == 404) {
+        throw 'No common groups found.';
+      } else {
+        rethrow;
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

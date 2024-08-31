@@ -25,6 +25,7 @@ class _GroupsScreensState extends State<GroupsScreens> {
   //Page variables
   Group? _selectedGroup;
   final TextEditingController _addPlayerController = TextEditingController();
+  final TextEditingController _newGroupController = TextEditingController();
 
   @override
   void initState() {
@@ -42,8 +43,52 @@ class _GroupsScreensState extends State<GroupsScreens> {
     return Scaffold(
       backgroundColor: buffaloYellow,
       body: _selectedGroup != null ? _displaySelectedGroup() : _groupsListing(),
-      floatingActionButton:
-          _selectedGroup != null ? _displayAddUserToGroupButton() : Container(),
+      floatingActionButton: _selectedGroup != null
+          ? _displayAddUserToGroupButton()
+          : _createGroupButton(),
+    );
+  }
+
+  FloatingActionButton _createGroupButton() {
+    return FloatingActionButton(
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Create A New Group'),
+                content: SizedBox(
+                  width: 500,
+                  child: TextField(
+                    controller: _newGroupController,
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        _newGroupController.clear();
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Cancel')),
+                  TextButton(
+                    onPressed: () {
+                      if (_newGroupController.text.isNotEmpty) {
+                        Navigator.of(context).pop();
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) {
+                              return createNewGroup();
+                            });
+                      }
+                    },
+                    child: const Text('Add'),
+                  )
+                ],
+              );
+            });
+      },
+      child: const Icon(Icons.group_add),
     );
   }
 
@@ -51,6 +96,7 @@ class _GroupsScreensState extends State<GroupsScreens> {
     return FloatingActionButton(
         onPressed: () {
           showDialog(
+              barrierDismissible: false,
               context: context,
               builder: (context) {
                 return AlertDialog(
@@ -86,6 +132,42 @@ class _GroupsScreensState extends State<GroupsScreens> {
         child: const Icon(Icons.person_add));
   }
 
+  FutureBuilder createNewGroup() {
+    return FutureBuilder(
+      future: _groupService.createNewGroup(
+          name: _newGroupController.text,
+          playerId: Provider.of<UserProvider>(context, listen: false).user!.id),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return AlertDialog(
+            title: const Text("Success!"),
+            content:
+                const Icon(Icons.check_circle, color: Colors.green, size: 50),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  _newGroupController.clear();
+                  setState(() {});
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              )
+            ],
+          );
+        } else if (snapshot.hasError) {
+          return AlertDialog(
+            title: const Text("Oops!"),
+            content: Text('Error: ${snapshot.error!.toString()}'),
+          );
+        }
+        return const AlertDialog(
+          title: Text("WAITAMINUTE!"),
+          content: LoadingIndicatorWithText(text: 'Creating Group...'),
+        );
+      },
+    );
+  }
+
   FutureBuilder findAndAddPlayer() {
     return FutureBuilder<User>(
         future:
@@ -108,6 +190,7 @@ class _GroupsScreensState extends State<GroupsScreens> {
                     Navigator.of(context).pop();
                     _addPlayerController.clear();
                     showDialog(
+                        barrierDismissible: false,
                         context: context,
                         builder: (context) {
                           return _addPlayerToGroup(user: snapshot.data!);
@@ -142,6 +225,7 @@ class _GroupsScreensState extends State<GroupsScreens> {
               actions: [
                 TextButton(
                   onPressed: () {
+                    setState(() {});
                     Navigator.of(context).pop();
                   },
                   child: const Text('OK'),
@@ -159,25 +243,6 @@ class _GroupsScreensState extends State<GroupsScreens> {
             content: LoadingIndicatorWithText(text: 'Adding Player...'),
           );
         });
-  }
-
-  Widget _displayTooLazyText() {
-    return const Column(
-      children: [
-        Flexible(
-          child: Center(
-              child: Text(
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                  "The first season of Buffalo is a wild west! Go all out! No groups! You are live to everyone!!!")),
-        ),
-        Spacer(),
-        Center(
-            child: Text(
-                "My dude... chill! I've got a life. Groups will be there soon.")),
-        SizedBox(height: 20)
-      ],
-    );
   }
 
   Widget _displaySelectedGroup() {
@@ -251,7 +316,7 @@ class _GroupsScreensState extends State<GroupsScreens> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
-            itemCount: snapshot.data?.length,
+            itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.all(5),

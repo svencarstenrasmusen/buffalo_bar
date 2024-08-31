@@ -8,6 +8,8 @@ import 'package:buffalo_bar/widgets/scalp_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/loadingIndicatorWithText.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -94,7 +96,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   title: Text(snapshot.data![index].username),
                   leading: const Icon(Icons.person),
                   onTap: () {
-                    _buffalo(snaggee: snapshot.data![index]);
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Confirm Your Scalp!'),
+                          content: Text(
+                              'Are you sure want to buffalo: ${snapshot.data![index].username}'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('No'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context) {
+                                      return _buffalo(
+                                          snaggee: snapshot.data![index]);
+                                    });
+                              },
+                              child: const Text('Yes'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                 );
               },
@@ -106,8 +138,47 @@ class _DashboardScreenState extends State<DashboardScreen> {
         });
   }
 
-  void _buffalo({required User snaggee}) {
+  FutureBuilder _buffalo({required User snaggee}) {
     User? user = Provider.of<UserProvider>(context, listen: false).user;
-    print('${user?.username} is buffaloing ${snaggee.username}');
+    return FutureBuilder(
+      future:
+          buffaloService.buffalo(scalperId: user!.id, snaggeeId: snaggee.id),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return AlertDialog(
+            title: const Text('SUCCESS!'),
+            content:
+                const Icon(Icons.check_circle, color: Colors.green, size: 50),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  setState(() {});
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              )
+            ],
+          );
+        } else if (snapshot.hasError) {
+          return AlertDialog(
+            title: const Text("OH MERDE!"),
+            content: Text('Error: ${snapshot.error!.toString()}'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  setState(() {});
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              )
+            ],
+          );
+        }
+        return const AlertDialog(
+          title: Text("BUFFALOING"),
+          content: LoadingIndicatorWithText(text: 'This is taking a bit...'),
+        );
+      },
+    );
   }
 }

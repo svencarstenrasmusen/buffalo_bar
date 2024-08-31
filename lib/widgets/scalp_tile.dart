@@ -16,8 +16,39 @@ class ScalpTile extends StatelessWidget {
             blurRadius: Constants.blurRadius,
             offset: Constants.blurOffset)
       ]),
-      child: Placeholder(
-          child: Text('${scalp.toString()} ${scalp.getDateTimeString()}')),
+      child: ListTile(
+        title: _buffaloContent(),
+        subtitle: Text(scalp.getDateTimeString()),
+      ),
+    );
+  }
+
+  Row _buffaloContent() {
+    return Row(
+      children: [
+        _scalperText(),
+        const Spacer(),
+        _snaggeeText(),
+        const Spacer()
+      ],
+    );
+  }
+
+  Row _scalperText() {
+    return Row(
+      children: [
+        const Text('Scalper: ', style: TextStyle(fontWeight: FontWeight.bold)),
+        Text(scalp.scalper.username)
+      ],
+    );
+  }
+
+  Row _snaggeeText() {
+    return Row(
+      children: [
+        const Text('Scalp: ', style: TextStyle(fontWeight: FontWeight.bold)),
+        Text(scalp.snaggee.username)
+      ],
     );
   }
 }

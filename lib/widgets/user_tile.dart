@@ -44,29 +44,29 @@ class UserTile extends StatelessWidget {
   Row _nameAndStats() {
     return Row(
       mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(flex: 2, child: Text(user.username)),
-        Expanded(
-          flex: 1,
-          child: Row(
-            children: [
-              const Text('Scalps: '),
-              Text(scalps.toString(),
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold))
-            ],
-          ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Row(
-            children: [
-              const Text('Snags: '),
-              Text(snags.toString(),
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold))
-            ],
-          ),
+        Text(user.username),
+        Row(
+          children: [
+            Row(
+              children: [
+                const Text('Scalps: '),
+                Text(scalps.toString(),
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold))
+              ],
+            ),
+            const SizedBox(width: 5),
+            Row(
+              children: [
+                const Text('Scalped: '),
+                Text(snags.toString(),
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold))
+              ],
+            )
+          ],
         ),
       ],
     );

@@ -43,6 +43,28 @@ class GroupService {
     }
   }
 
+  Future<Group> createNewGroup(
+      {required String name, required String playerId}) async {
+    String path = '$API_URL/api/v1/pack';
+
+    BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
+    adapter.withCredentials = true;
+    dio.httpClientAdapter = adapter;
+
+    var body = {'name': name, 'playerId': playerId};
+
+    try {
+      final response = await dio.post(path, data: jsonEncode(body));
+      if (response.statusCode == 200) {
+        return _parser.parseCreatedGroup(response.data);
+      } else {
+        throw Exception('Unexpected error creating group.');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<bool> addPlayerToGroup(
       {required String playerId,
       required String groupId,
