@@ -84,8 +84,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   FutureBuilder _getAllPlayers() {
+    String userId = Provider.of<UserProvider>(context, listen: false).user!.id;
     return FutureBuilder<List<User>>(
-        future: userService.getAllUsers(),
+        future: userService.getFriends(userId: userId),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(

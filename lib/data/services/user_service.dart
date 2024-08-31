@@ -53,6 +53,31 @@ class UserService {
     }
   }
 
+  Future<List<User>> getFriends({required String userId}) async {
+    String path = '$API_URL/api/v1/playerPack/friends/$userId';
+
+    BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
+    adapter.withCredentials = true;
+    dio.httpClientAdapter = adapter;
+
+    try {
+      final response = await dio.get(path);
+      if (response.statusCode == 200) {
+        return _parser.parseListOfUsers(response.data);
+      } else {
+        throw Exception('Unexpected error getting friends.');
+      }
+    } on DioException catch (e) {
+      if (e.response!.statusCode == 404) {
+        throw 'Player not found.';
+      } else {
+        rethrow;
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<User> getUserByUsername({required String username}) async {
     String path = '$API_URL/api/v1/player/username/$username';
 

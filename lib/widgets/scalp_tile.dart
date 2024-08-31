@@ -26,16 +26,19 @@ class ScalpTile extends StatelessWidget {
   Row _buffaloContent() {
     return Row(
       children: [
-        _scalperText(),
-        const Spacer(),
-        _snaggeeText(),
-        const Spacer()
+        Expanded(flex: 2, child: _scalperText()),
+        Expanded(
+          flex: 2,
+          child: _snaggeeText(),
+        )
       ],
     );
   }
 
   Row _scalperText() {
     return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Text('Scalper: ', style: TextStyle(fontWeight: FontWeight.bold)),
         Text(scalp.scalper.username)
@@ -45,6 +48,8 @@ class ScalpTile extends StatelessWidget {
 
   Row _snaggeeText() {
     return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Text('Scalp: ', style: TextStyle(fontWeight: FontWeight.bold)),
         Text(scalp.snaggee.username)
