@@ -6,6 +6,7 @@ import 'package:buffalo_bar/data/parsers/user_parser.dart';
 import 'package:buffalo_bar/exceptions/ServerOfflineException.dart';
 import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nonce/nonce.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -13,9 +14,11 @@ class OidcService {
   final Dio dio = Dio();
   final JSONUserParser userParser = JSONUserParser();
 
-  static const String redirect = OIDC_REDIRECT_URL;
-  String clientId = OIDC_CLIENT_ID;
-  String oidcLoginUrl = OIDC_LOGIN_URL;
+  String apiURL = dotenv.get('API_URL');
+
+  String redirect = dotenv.get('OIDC_REDIRECT_URL');
+  String clientId = dotenv.get('OIDC_CLIENT_ID');
+  String oidcLoginUrl = dotenv.get('OIDC_LOGIN_URL');
 
   void redirectToOidc(String? state) async {
     String nonce = Nonce.generate();
@@ -52,7 +55,7 @@ class OidcService {
     var body = {'code': code};
     var jsonBody = jsonEncode(body);
 
-    String authEndpoint = '$API_URL/api/oidc';
+    String authEndpoint = '$apiURL/api/oidc';
 
     try {
       final response = await dio.post(authEndpoint, data: jsonBody);

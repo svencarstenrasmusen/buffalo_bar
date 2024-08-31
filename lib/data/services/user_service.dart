@@ -6,11 +6,14 @@ import 'package:buffalo_bar/data/parsers/user_parser.dart';
 import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class UserService {
   final Dio dio = Dio();
   final JSONUserParser _parser = JSONUserParser();
   final String _baseApi = mockDataPath;
+
+  String apiURL = dotenv.get('API_URL');
 
   Future<User> login() async {
     String path = '$_baseApi/currentUser.json';
@@ -35,7 +38,7 @@ class UserService {
   }
 
   Future<List<User>> getAllUsers() async {
-    String path = '$API_URL/api/v1/player/all';
+    String path = '$apiURL/api/v1/player/all';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;
@@ -48,13 +51,19 @@ class UserService {
       } else {
         throw Exception('Unexpected error getting all players.');
       }
+    } on DioException catch (e) {
+      if (e.response!.statusCode == 401) {
+        throw 'Log in again.';
+      } else {
+        rethrow;
+      }
     } catch (e) {
       rethrow;
     }
   }
 
   Future<List<User>> getFriends({required String userId}) async {
-    String path = '$API_URL/api/v1/playerPack/friends/$userId';
+    String path = '$apiURL/api/v1/playerPack/friends/$userId';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;
@@ -81,7 +90,7 @@ class UserService {
   }
 
   Future<User> getUserByUsername({required String username}) async {
-    String path = '$API_URL/api/v1/player/username/$username';
+    String path = '$apiURL/api/v1/player/username/$username';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;

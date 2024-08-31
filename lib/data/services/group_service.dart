@@ -7,14 +7,16 @@ import 'package:buffalo_bar/data/parsers/group_parser.dart';
 import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class GroupService {
   final JSONGroupParser _parser = JSONGroupParser();
   final String _baseApi = mockDataPath;
   Dio dio = Dio();
+  String apiURL = dotenv.get('API_URL');
 
   Future<List<Group>> getAllJoinedGroups({required String id}) async {
-    String path = '$API_URL/api/v1/playerPack/packs/$id';
+    String path = '$apiURL/api/v1/playerPack/packs/$id';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;
@@ -23,13 +25,21 @@ class GroupService {
     try {
       final response = await dio.get(path);
       return _parser.parseListOfGroups(response.data);
+    } on DioException catch (e) {
+      if (e.response!.statusCode == 401) {
+        throw 'Log in again.';
+      } else if (e.response!.statusCode == 404) {
+        throw 'No common groups found.';
+      } else {
+        rethrow;
+      }
     } catch (e) {
       rethrow;
     }
   }
 
   Future<List<User>> getAllPlayersFromGroupId({required String id}) async {
-    String path = '$API_URL/api/v1/playerPack/players/$id';
+    String path = '$apiURL/api/v1/playerPack/players/$id';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;
@@ -38,6 +48,12 @@ class GroupService {
     try {
       final response = await dio.get(path);
       return _parser.parseLifOfPlayersFromGroup(response.data);
+    } on DioException catch (e) {
+      if (e.response!.statusCode == 401) {
+        throw 'Log in again.';
+      } else {
+        rethrow;
+      }
     } catch (e) {
       rethrow;
     }
@@ -45,7 +61,7 @@ class GroupService {
 
   Future<Group> createNewGroup(
       {required String name, required String playerId}) async {
-    String path = '$API_URL/api/v1/pack';
+    String path = '$apiURL/api/v1/pack';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;
@@ -60,6 +76,12 @@ class GroupService {
       } else {
         throw Exception('Unexpected error creating group.');
       }
+    } on DioException catch (e) {
+      if (e.response!.statusCode == 401) {
+        throw 'Log in again.';
+      } else {
+        rethrow;
+      }
     } catch (e) {
       rethrow;
     }
@@ -69,7 +91,7 @@ class GroupService {
       {required String playerId,
       required String groupId,
       required bool isAdmin}) async {
-    String path = '$API_URL/api/v1/playerPack';
+    String path = '$apiURL/api/v1/playerPack';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;

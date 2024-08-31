@@ -5,13 +5,15 @@ import 'package:buffalo_bar/data/models/buffalo.dart';
 import 'package:buffalo_bar/data/parsers/buffalo_parser.dart';
 import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class BuffaloService {
   final Dio dio = Dio();
   final JSONBuffaloParser _parser = JSONBuffaloParser();
+  String apiURL = dotenv.get('API_URL');
 
   Future<List<Buffalo>> getAllBuffaloes() async {
-    String path = '$API_URL/api/v1/buffalo/all';
+    String path = '$apiURL/api/v1/buffalo/all';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;
@@ -24,6 +26,14 @@ class BuffaloService {
       } else {
         throw Exception('Unexpected error getting ALL buffaloes.');
       }
+    } on DioException catch (e) {
+      if (e.response!.statusCode == 401) {
+        throw 'Log in again.';
+      } else if (e.response!.statusCode == 404) {
+        throw 'No buffaloes found.';
+      } else {
+        rethrow;
+      }
     } catch (e) {
       rethrow;
     }
@@ -31,7 +41,7 @@ class BuffaloService {
 
   Future<bool> buffalo(
       {required String scalperId, required String snaggeeId}) async {
-    String path = '$API_URL/api/v1/buffalo/add';
+    String path = '$apiURL/api/v1/buffalo/add';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;
