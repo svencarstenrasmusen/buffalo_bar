@@ -68,7 +68,9 @@ class UserService {
         throw Exception('Unexpected error getting friends.');
       }
     } on DioException catch (e) {
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 401) {
+        throw 'Log in again.';
+      } else if (e.response!.statusCode == 404) {
         throw 'Player not found.';
       } else {
         rethrow;
@@ -95,7 +97,9 @@ class UserService {
         throw Exception('Unexpected error finding a player by username.');
       }
     } on DioException catch (e) {
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 401) {
+        throw 'Log in again.';
+      } else if (e.response!.statusCode == 404) {
         throw 'Player not found.';
       } else {
         rethrow;

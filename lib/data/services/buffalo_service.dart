@@ -52,7 +52,9 @@ class BuffaloService {
         throw Exception('Unexpected error getting ALL buffaloes.');
       }
     } on DioException catch (e) {
-      if (e.response!.statusCode == 404) {
+      if (e.response!.statusCode == 401) {
+        throw 'Log in again.';
+      } else if (e.response!.statusCode == 404) {
         throw 'No common groups found.';
       } else {
         rethrow;

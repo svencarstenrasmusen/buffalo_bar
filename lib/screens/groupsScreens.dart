@@ -274,6 +274,9 @@ class _GroupsScreensState extends State<GroupsScreens> {
   }
 
   ListView _listing({required List<User> users}) {
+    users.sort((a, b) =>
+        (b.scalpCount! - b.snagCount!).compareTo(a.scalpCount! - a.snagCount!));
+
     return ListView.builder(
       itemCount: users.length,
       itemBuilder: (context, index) {
@@ -281,10 +284,10 @@ class _GroupsScreensState extends State<GroupsScreens> {
           padding: const EdgeInsets.only(bottom: 5),
           child: UserTile(
               user: users[index],
-              joinedAt: '21.08.2024',
-              isAdmin: true,
-              scalps: 21,
-              snags: 17,
+              joinedAt: users[index].getJoinedAtDate()!,
+              isAdmin: users[index].isAdmin,
+              scalps: users[index].scalpCount!,
+              snags: users[index].snagCount!,
               position: index + 1),
         );
       },

@@ -35,8 +35,10 @@ class UserTile extends StatelessWidget {
         title: _nameAndStats(),
         subtitle: Text('Joined: $joinedAt'),
         trailing: isAdmin == true
-            ? const Icon(Icons.verified_user, color: Colors.blue)
-            : Container(),
+            ? const Tooltip(
+                message: 'This user is an admin',
+                child: Icon(Icons.verified_user, color: Colors.blue))
+            : const SizedBox(height: 1, width: 1),
       ),
     );
   }

@@ -19,7 +19,15 @@ class JSONGroupParser {
   }
 
   User parsePlayerFromGroup(Map<String, dynamic> json) {
-    return User.fromJson(json['player']);
+    return User(
+        id: json['playerPack']['player']['id'],
+        username: json['playerPack']['player']['username'],
+        createdAt: json['playerPack']['player']['createdAt'],
+        isAdmin: json['playerPack']['admin'],
+        joinedAt: DateTime.parse(json['playerPack']['joinedAt']),
+        email: json['playerPack']['player']['email'],
+        scalpCount: json['scalpCount'] ?? 0,
+        snagCount: json['snagCount'] ?? 0);
   }
 
   List<User> parseLifOfPlayersFromGroup(List jsonList) {
