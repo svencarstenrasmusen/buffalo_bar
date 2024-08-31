@@ -27,7 +27,8 @@ class BuffaloWidget extends StatelessWidget {
         child: CircleAvatar(
           radius: innerRadius,
           backgroundColor: innerColor,
-          child: icon,
+          child: const Text('BUFFALO!',
+              style: TextStyle(fontSize: 25, color: Colors.white)),
         ),
       );
     });
