@@ -1,22 +1,18 @@
 import 'dart:convert';
 
-import 'package:buffalo_bar/config.dart';
 import 'package:buffalo_bar/data/models/user.dart';
 import 'package:buffalo_bar/data/parsers/user_parser.dart';
+import 'package:buffalo_bar/environment_config.dart';
 import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class UserService {
   final Dio dio = Dio();
   final JSONUserParser _parser = JSONUserParser();
-  final String _baseApi = mockDataPath;
-
-  String apiURL = dotenv.get('API_URL');
 
   Future<User> login() async {
-    String path = '$_baseApi/currentUser.json';
+    String path = '$mockDataPath/currentUser.json';
     try {
       final response = await rootBundle.loadString(path);
       var data = jsonDecode(response);
@@ -27,7 +23,7 @@ class UserService {
   }
 
   Future<List<User>> mockGetAllGroupUsers() async {
-    String path = '$_baseApi/groupUsers.json';
+    String path = '$mockDataPath/groupUsers.json';
     try {
       final response = await rootBundle.loadString(path);
       var data = jsonDecode(response);
@@ -38,7 +34,7 @@ class UserService {
   }
 
   Future<List<User>> getAllUsers() async {
-    String path = '$apiURL/api/v1/player/all';
+    String path = '$apiUrl/api/v1/player/all';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;
@@ -63,7 +59,7 @@ class UserService {
   }
 
   Future<List<User>> getFriends({required String userId}) async {
-    String path = '$apiURL/api/v1/playerPack/friends/$userId';
+    String path = '$apiUrl/api/v1/playerPack/friends/$userId';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;
@@ -90,7 +86,7 @@ class UserService {
   }
 
   Future<User> getUserByUsername({required String username}) async {
-    String path = '$apiURL/api/v1/player/username/$username';
+    String path = '$apiUrl/api/v1/player/username/$username';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;

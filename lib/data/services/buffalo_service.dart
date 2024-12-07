@@ -1,19 +1,17 @@
 import 'dart:convert';
 
-import 'package:buffalo_bar/config.dart';
 import 'package:buffalo_bar/data/models/buffalo.dart';
 import 'package:buffalo_bar/data/parsers/buffalo_parser.dart';
+import 'package:buffalo_bar/environment_config.dart';
 import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class BuffaloService {
   final Dio dio = Dio();
   final JSONBuffaloParser _parser = JSONBuffaloParser();
-  String apiURL = dotenv.get('API_URL');
 
   Future<List<Buffalo>> getAllBuffaloes() async {
-    String path = '$apiURL/api/v1/buffalo/all';
+    String path = '$apiUrl/api/v1/buffalo/all';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;
@@ -41,7 +39,7 @@ class BuffaloService {
 
   Future<bool> buffalo(
       {required String scalperId, required String snaggeeId}) async {
-    String path = '$apiURL/api/v1/buffalo/add';
+    String path = '$apiUrl/api/v1/buffalo/add';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;

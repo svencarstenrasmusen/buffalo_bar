@@ -1,16 +1,36 @@
 [
   {
     "id": "scalp-01",
-    "scalper": "user-02",
-    "snaggee": "user-03",
+    "scalper": {
+      "id": "user-02",
+      "username": "JohnDoe",
+      "email": "johndoe@email.com",
+      "createdAt": "1720476510"
+    },
+    "snaggee": {
+      "id": "user-02",
+      "username": "JohnDoe",
+      "email": "johndoe@email.com",
+      "createdAt": "1720476510"
+    },
     "dateTime": "2024-07-10 19:53:00",
     "latitude": 49.6106,
     "longitude": 6.13053
   },
   {
     "id": "scalp-02",
-    "scalper": "user-02",
-    "snaggee": "user-03",
+    "scalper": {
+      "id": "user-02",
+      "username": "JohnDoe",
+      "email": "johndoe@email.com",
+      "createdAt": "1720476510"
+    },
+    "snaggee": {
+      "id": "user-02",
+      "username": "JohnDoe",
+      "email": "johndoe@email.com",
+      "createdAt": "1720476510"
+    },
     "dateTime": "2024-07-10 19:56:15",
     "latitude": 49.6106,
     "longitude": 6.13053

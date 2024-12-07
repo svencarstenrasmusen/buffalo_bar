@@ -1,22 +1,20 @@
 import 'dart:convert';
 
-import 'package:buffalo_bar/config.dart';
 import 'package:buffalo_bar/data/models/group.dart';
 import 'package:buffalo_bar/data/models/user.dart';
 import 'package:buffalo_bar/data/parsers/group_parser.dart';
+import 'package:buffalo_bar/environment_config.dart';
 import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class GroupService {
   final JSONGroupParser _parser = JSONGroupParser();
   final String _baseApi = mockDataPath;
   Dio dio = Dio();
-  String apiURL = dotenv.get('API_URL');
 
   Future<List<Group>> getAllJoinedGroups({required String id}) async {
-    String path = '$apiURL/api/v1/playerPack/packs/$id';
+    String path = '$apiUrl/api/v1/playerPack/packs/$id';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;
@@ -39,7 +37,7 @@ class GroupService {
   }
 
   Future<List<User>> getAllPlayersFromGroupId({required String id}) async {
-    String path = '$apiURL/api/v1/playerPack/players/$id';
+    String path = '$apiUrl/api/v1/playerPack/players/$id';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;
@@ -61,7 +59,7 @@ class GroupService {
 
   Future<Group> createNewGroup(
       {required String name, required String playerId}) async {
-    String path = '$apiURL/api/v1/pack';
+    String path = '$apiUrl/api/v1/pack';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;
@@ -91,7 +89,7 @@ class GroupService {
       {required String playerId,
       required String groupId,
       required bool isAdmin}) async {
-    String path = '$apiURL/api/v1/playerPack';
+    String path = '$apiUrl/api/v1/playerPack';
 
     BrowserHttpClientAdapter adapter = BrowserHttpClientAdapter();
     adapter.withCredentials = true;

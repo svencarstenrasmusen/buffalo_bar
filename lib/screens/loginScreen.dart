@@ -6,7 +6,6 @@ import 'package:buffalo_bar/widgets/buffalo_widget.dart';
 import 'package:buffalo_bar/widgets/buttons/buffalo_button.dart';
 import 'package:buffalo_bar/widgets/dialogs/not_implement.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
